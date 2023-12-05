@@ -1,0 +1,48 @@
+CREATE DATABASE music;
+
+CREATE TABLE public.artist (
+    id SERIAL PRIMARY KEY,
+    name varchar(60) UNIQUE NOT NULL
+);
+
+CREATE TABLE public.genre (
+    id SERIAL PRIMARY KEY,
+    title varchar(60) UNIQUE NOT NULL
+);
+
+CREATE TABLE public.album (
+    id SERIAL PRIMARY KEY,
+    title varchar(60) UNIQUE NOT NULL,
+    year smallint NOT NULL
+);
+
+CREATE TABLE public.collection (
+    id SERIAL PRIMARY KEY,
+    title varchar(60) UNIQUE NOT NULL,
+    year smallint NOT NULL
+);
+
+CREATE TABLE public.song (
+    id SERIAL PRIMARY KEY,
+    name varchar(60) UNIQUE NOT NULL,
+    duration smallint NOT NULL,
+    album_id int NOT NULL REFERENCES album(id)   
+);
+
+CREATE TABLE public.catalog_song (
+    song_id int NOT NULL REFERENCES song(id),
+    collection_id int NOT NULL REFERENCES collection(id),
+    CONSTRAINT pk PRIMARY KEY (song_id, collection_id)
+);
+
+CREATE TABLE public.catalog_artist (
+    artist_id int NOT NULL REFERENCES artist(id),
+    genre_id int NOT NULL REFERENCES genre(id),
+    CONSTRAINT pk2 PRIMARY KEY (artist_id, genre_id)
+);
+
+CREATE TABLE public.catalog_album (
+    artist_id int NOT NULL REFERENCES artist(id),
+    album_id int NOT NULL REFERENCES album(id),
+    CONSTRAINT pk3 PRIMARY KEY (artist_id, album_id)
+);
